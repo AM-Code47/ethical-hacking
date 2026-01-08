@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NasG Elite Academy | Deep Cyber Mastery</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Lexend:wght@700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg: #050505;
+            --sidebar-bg: #0a0a0a;
+            --silver: #e0e0e0;
+            --silver-dark: #888;
+            --accent: #00ff66; /* Neon Green */
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background-color: var(--bg);
+            color: var(--silver);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* NAVIGATION BAR */
+        nav {
+            position: fixed; top: 0; width: 100%; height: 70px;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 5%; background: rgba(0,0,0,0.95);
+            border-bottom: 1px solid var(--border); z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+        .logo { font-family: 'Lexend', sans-serif; font-size: 1.8rem; font-weight: 800; color: #fff; letter-spacing: -1px; }
+        .logo span { color: var(--accent); }
+
+        .nav-links a {
+            margin-left: 25px; color: var(--silver-dark); text-decoration: none;
+            font-weight: 500; font-size: 0.9rem; transition: 0.3s;
+        }
+
+        /* MAIN LAYOUT */
+        main {
+            height: 100vh;
+            padding-top: 70px;
+            display: flex;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 280px;
+            background: var(--sidebar-bg);
+            border-right: 1px solid var(--border);
+            padding: 30px 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            overflow-y: auto;
+        }
+        .sidebar h4 { 
+            font-family: 'Lexend', sans-serif; 
+            color: var(--silver-dark); 
+            font-size: 0.75rem; 
+            text-transform: uppercase; 
+            letter-spacing: 2px;
+            margin: 20px 0 10px 15px;
+        }
+        .menu-item {
+            padding: 15px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            color: var(--silver-dark);
+            transition: 0.3s all;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+        .menu-item i { margin-right: 12px; width: 20px; font-size: 1.1rem; }
+        .menu-item:hover { background: var(--glass); color: #fff; }
+        .menu-item.active { background: var(--glass); color: var(--accent); border-left: 4px solid var(--accent); }
+
+        /* CONTENT AREA */
+        .content-area { 
+            flex: 1; 
+            padding: 50px; 
+            overflow-y: auto; 
+            background: radial-gradient(circle at top right, #0a0a0a, #050505);
+        }
+        
+        .page { display: none; max-width: 1000px; margin: 0 auto; animation: fadeIn 0.4s ease-out; }
+        .page.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* TYPOGRAPHY & COMPONENTS */
+        h1 { font-family: 'Lexend', sans-serif; font-size: 3.5rem; color: #fff; margin-bottom: 25px; }
+        h2 { font-family: 'Lexend', sans-serif; font-size: 2.2rem; color: #fff; margin: 40px 0 20px; border-left: 5px solid var(--accent); padding-left: 15px; }
+        p { font-size: 1.2rem; color: #aaa; margin-bottom: 25px; line-height: 1.8; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-top: 30px; }
+        .card { 
+            background: var(--glass); 
+            border: 1px solid var(--border); 
+            padding: 35px; 
+            border-radius: 20px; 
+            transition: 0.3s;
+        }
+        .card:hover { border-color: var(--accent); transform: translateY(-5px); }
+        
+        .img-box {
+            width: 100%; border-radius: 20px; overflow: hidden;
+            border: 1px solid var(--border); margin: 40px 0;
+        }
+        .img-box img { width: 100%; height: 450px; object-fit: cover; filter: grayscale(30%); transition: 0.5s; }
+        .img-box:hover img { filter: grayscale(0%); transform: scale(1.03); }
+
+        /* CODE BOX */
+        .code-container { margin: 35px 0; border-radius: 15px; overflow: hidden; border: 1px solid var(--border); }
+        .code-header { background: #1a1a1a; padding: 12px 25px; font-size: 0.9rem; color: var(--accent); display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); }
+        .code-window {
+            background: #000; padding: 30px;
+            font-family: 'Consolas', monospace; color: #d0d0d0;
+            font-size: 1rem; line-height: 1.6; overflow-x: auto;
+        }
+        .code-window .keyword { color: #ff79c6; }
+        .code-window .string { color: #f1fa8c; }
+        .code-window .comment { color: #6272a4; }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            main { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; flex-direction: row; overflow-x: auto; padding: 10px; }
+            .sidebar h4 { display: none; }
+            h1 { font-size: 2.5rem; }
+            .img-box img { height: 300px; }
+            .content-area { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">NasG<span>_V11</span></div>
+    <div class="nav-links">
+        <a href="#" style="color: var(--accent);">STUDENT_PORTAL</a>
+        <a href="#">RESOURCES</a>
+    </div>
+</nav>
+
+<main>
+    <aside class="sidebar">
+        <h4>Masomo ya Academy</h4>
+        <div class="menu-item active" onclick="go('home', this)"><i class="fas fa-th-large"></i> Dashboard</div>
+        <div class="menu-item" onclick="go('hacking', this)"><i class="fas fa-mask"></i> Ethical Hacking</div>
+        <div class="menu-item" onclick="go('web', this)"><i class="fas fa-globe"></i> Web Pentesting</div>
+        <div class="menu-item" onclick="go('python', this)"><i class="fas fa-code"></i> Python Master</div>
+        <div class="menu-item" onclick="go('linux', this)"><i class="fab fa-linux"></i> Linux OS</div>
+        <div class="menu-item" onclick="go('social', this)"><i class="fas fa-brain"></i> Psychology</div>
+        <div class="menu-item" onclick="go('bug', this)"><i class="fas fa-dollar-sign"></i> Bug Bounty</div>
+        <div class="menu-item" onclick="go('cert', this)"><i class="fas fa-certificate"></i> Certifications</div>
+    </aside>
+
+    <div class="content-area">
+
+        <div id="home" class="page active">
+            <h1>Karibu NasG Elite Academy</h1>
+            <p>Huu ni mfumo wa kisasa ulioundwa kwa ajili ya vijana wanaotaka kuwa mabingwa wa usalama wa mitandao. Tumeimarisha muonekano huu ili uweze kusoma maelezo marefu kwa urahisi zaidi bila kuchosha macho.</p>
+            
+            <div class="img-box">
+                <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1200" alt="Cyber Security Hub">
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <i class="fas fa-shield-alt" style="color: var(--accent); font-size: 2.5rem; margin-bottom: 20px;"></i>
+                    <h2>Ulinzi wa Data</h2>
+                    <p>Jifunze mbinu za kulinda mifumo ya kampuni na watu binafsi dhidi ya mashambulizi ya kisasa ya Ransomware na kurejesha data zilizopotea.</p>
+                </div>
+                <div class="card">
+                    <i class="fas fa-user-graduate" style="color: var(--accent); font-size: 2.5rem; margin-bottom: 20px;"></i>
+                    <h2>Cheti cha Elite</h2>
+                    <p>Baada ya kukamilisha kozi zote kwa ufaulu, utapewa cheti kinachothibitisha utaalamu wako katika nyanja ya Cyber Security na Pen-Testing.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="hacking" class="page">
+            <h1>Ethical Hacking 101</h1>
+            <p>Udukuzi wa kimaadili ni sanaa ya kutumia akili yako kutatua matatizo kabla wahalifu hawajayagundua. Katika moduli hii, tunazama ndani ya mbinu za <strong>Penetration Testing</strong> na jinsi ya kufanya "Red Teaming" kwa kampuni.</p>
+            
+            <div class="img-box">
+                <img src="https://images.unsplash.com/photo-1526374965328-7f66a2e9f390?auto=format&fit=crop&q=80&w=1200" alt="Hacker Terminal">
+            </div>
+
+            <h2>Hatua za Udukuzi</h2>
+            <p>Hacking huanza na ukusanyaji wa taarifa (Reconnaissance). Hapa ndipo unajifunza kutumia zana kama Nmap na Shodan kupata milango iliyo wazi kwenye server na udhaifu wake.</p>
+            
+            <div class="code-container">
+                <div class="code-header">nmap_scan.sh <i class="fas fa-terminal"></i></div>
+                <div class="code-window">
+                    <span class="comment"># Scan kali ya kugundua huduma na udhaifu wa target</span><br>
+                    nmap -sV -sC -A <span class="string">"192.168.1.1/24"</span> 
+                </div>
+            </div>
+        </div>
+
+        <div id="web" class="page">
+            <h1>Web Application Hacking</h1>
+            <p>Leo hii, maisha yapo kwenye web. Jifunze jinsi ya kuvunja na kurekebisha makosa makubwa ya kiusalama kwenye tovuti (OWASP Top 10) na APIs.</p>
+            
+            <div class="img-box">
+                <img src="https://images.unsplash.com/photo-1596558450262-d2274431799a?auto=format&fit=crop&q=80&w=1200" alt="Web Hacking">
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <h2>SQL Injection</h2>
+                    <p>Mbinu ya kuingiza kodi za uongo kwenye fomu za tovuti ili kuilazimisha database itoe siri kama password za watumiaji wote au data nyeti.</p>
+                </div>
+                <div class="card">
+                    <h2>Cross-Site Scripting (XSS)</h2>
+                    <p>Kuingiza JavaScript hatari kwenye kurasa za tovuti, ambayo inaweza kuiba 'cookies' au kuhamisha watumiaji kwenye tovuti bandia (Phishing).</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="python" class="page">
+            <h1>Python for Hackers</h1>
+            <p>Python ni lugha ya programu namba moja kwa ajili ya usalama wa mitandao. Inakupa uwezo wa kutengeneza zana zako binafsi (Custom Tools) kuanzia Network Scanners hadi Backdoors.</p>
+            
+            <div class="img-box">
+                <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=1200" alt="Python Code">
+            </div>
+
+            <h2>Tengeneza Zana Zako</h2>
+            <p>Hapa utajifunza jinsi ya kutumia maktaba (libraries) kama <code>Scapy</code> kwa ajili ya network sniffing, <code>Requests</code> kwa ajili ya web interaction, na <code>Subprocess</code> kwa kuendesha amri za mfumo.</p>
+            
+            <div class="code-container">
+                <div class="code-header">simple_backdoor.py <i class="fab fa-python"></i></div>
+                <div class="code-window">
+                    <span class="keyword">import</span> socket<br><br>
+                    <span class="comment"># Backdoor inayotuma amri kutoka kwa hacker</span><br>
+                    def execute_command(command):<br>
+                    &nbsp;&nbsp;<span class="keyword">return</span> subprocess.check_output(command, shell=<span class="keyword">True</span>)
+                </div>
+            </div>
+        </div>
+
+        <div id="linux" class="page">
+            <h1>Linux Operating System</h1>
+            <p>Kama unataka kuwa hacker au mtaalamu wa Cyber Security, lazima uache kutumia mouse na uanze kutumia <strong>Terminal</strong>. Linux inakupa mamlaka kamili juu ya kompyuta yako na ni mfumo unaopendelewa kwa zana za hacking.</p>
+            
+            <div class="img-box">
+                <img src="https://images.unsplash.com/photo-1610471927704-585ef4c45a70?auto=format&fit=crop&q=80&w=1200" alt="Linux Terminal">
+            </div>
+
+            <div class="card">
+                <h2>Amri Muhimu (Essential Commands)</h2>
+                <p>Kuelewa amri hizi ni msingi:<br>
+                   <code>ls -la</code> - Orodhesha faili zote na ruhusa zake.<br>
+                   <code>cd /var/www</code> - Badilisha folda.<br>
+                   <code>sudo apt update</code> - Sasisha mfumo (Admin privileges).<br>
+                   <code>grep "password" /etc/passwd</code> - Tafuta neno 'password' ndani ya faili.</p>
+            </div>
+        </div>
+
+        <div id="social" class="page">
+            <h1>Social Engineering Psychology</h1>
+            <p>Udukuzi huu hauhusu code, unahusu kumchezea akili binadamu. Jifunze mbinu za kisaikolojia za kulinda taarifa na jinsi ya kutambua mbinu za walaghai.</p>
+            
+            <div class="img-box">
+                <img src="https://images.unsplash.com/photo-1543286386-713bdd598642?auto=format&fit=crop&q=80&w=1200" alt="Social Engineering">
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <h2>Mbinu za Phishing</h2>
+                    <p>Jifunze kutengeneza kurasa za kughushi (Fake Login Pages) ili kuelewa jinsi gani watu wanadanganywa kutoa password zao, na jinsi ya kujilinda.</p>
+                </div>
+                <div class="card">
+                    <h2>Pretexting & Impersonation</h2>
+                    <p>Hii ni mbinu ya kutengeneza scenario ya uongo au kujifanya mtu mwingine ili kupata taarifa nyeti kutoka kwa mfanyakazi au mtu binafsi bila wao kujua.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="bug" class="page">
+            <h1>Bug Bounty Hunting</h1>
+            <p>Hapa ndipo elimu inapokutana na pesa taslimu. Makampuni makubwa kama Google, Facebook, na Tesla yanakulipa mamilioni ya pesa ukigundua 'bug' (udhaifu wa kiusalama) kwenye mifumo yao kabla wahalifu hawajaupata.</p>
+            
+            <div class="img-box">
+                <img src="https://images.unsplash.com/photo-1541462613133-c8a77a87df2a?auto=format&fit=crop&q=80&w=1200" alt="Bug Bounty">
+            </div>
+
+            <div class="card" style="border-left: 5px solid gold;">
+                <h2>Anza Kulipwa Leo</h2>
+                <p>Tutakufundisha jinsi ya kuandika ripoti ya kitalaamu (Proof of Concept - PoC) na kuituma kwenye majukwaa kama HackerOne na Bugcrowd. Pia, jinsi ya kuomba malipo yako (Bounty) bila matatizo.</p>
+            </div>
+        </div>
+
+        <div id="cert" class="page">
+            <h1>Vyeti vya NasG Elite</h1>
+            <p>Baada ya kukamilisha kozi na mitihani yote kwa ufaulu, utapokea vyeti vya kitaalamu vinavyothibitisha ujuzi wako katika nyanja mbalimbali za usalama wa mitandao.</p>
+            
+            <div class="img-box">
+                <img src="https://images.unsplash.com/photo-1523580436-e8206037042a?auto=format&fit=crop&q=80&w=1200" alt="Certification">
+            </div>
+
+            <div class="grid">
+                <div class="card" style="text-align: center; border: 2px dashed var(--accent);">
+                    <i class="fas fa-award" style="font-size: 3.5rem; color: var(--accent); margin-bottom: 20px;"></i>
+                    <h2>Certified Pen-Tester</h2>
+                    <p>Status: <span style="color: yellow; font-weight: bold;">In Progress (75%)</span></p>
+                    <p style="font-size: 0.9rem;">Fanya mtihani wa mwisho ili kupokea cheti chako.</p>
+                </div>
+                <div class="card" style="text-align: center;">
+                    <i class="fas fa-microchip" style="font-size: 3.5rem; color: var(--silver-dark); margin-bottom: 20px;"></i>
+                    <h2>Cyber Analyst</h2>
+                    <p>Status: <span style="color: red; font-weight: bold;">Not Started</span></p>
+                    <p style="font-size: 0.9rem;">Anza moduli ya Cyber Security Fundamentals.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script>
+    function go(pageId, element) {
+        // 1. Update Menu State
+        document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+        element.classList.add('active');
+
+        // 2. Hide all pages
+        const pages = document.querySelectorAll('.page');
+        pages.forEach(p => {
+            p.classList.remove('active');
+            p.style.display = 'none';
+        });
+
+        // 3. Show and Animate
+        const target = document.getElementById(pageId);
+        target.style.display = 'block';
+        
+        gsap.fromTo(target, 
+            { opacity: 0, x: 30 }, 
+            { opacity: 1, x: 0, duration: 0.6, ease: "power2.out" }
+        );
+        
+        target.classList.add('active');
+    }
+</script>
+
+</body>
+</html>
